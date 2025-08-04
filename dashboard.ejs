@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Error messages -->
+    <% if (errors && errors.length > 0) { %>
+      <div class="errors" style="color: red;">
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <!-- Success message -->
+    <% if (success) { %>
+      <div class="success" style="color: green;">
+        <p><%= success %></p>
+      </div>
+    <% } %>
+
+    <!-- Welcome Section -->
+    <h1>Welcome, <%= name %>!</h1>
+    <p><strong>Email:</strong> <%= email %></p>
+    <% if (bio) { %>
+      <p><strong>Bio:</strong> <%= bio %></p>
+    <% } %>
+
+    <!-- Logout Form -->
+    <form action="/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+
+    <hr />
+
+    <!-- Profile Update Form -->
+    <h2>Update Profile</h2>
+    <form action="/profile/update" method="POST">
+      <label for="name">Name:</label><br />
+      <input type="text" id="name" name="name" value="<%= name %>" required /><br /><br />
+
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="email" value="<%= email %>" required /><br /><br />
+
+      <label for="bio">Bio:</label><br />
+      <textarea id="bio" name="bio" maxlength="500"><%= bio || '' %></textarea><br /><br />
+
+      <button type="submit">Update Profile</button>
+    </form>
+  </div>
+</body>
+</html>
