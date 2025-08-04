@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const crypto = require('crypto');
 const { body, validationResult } = require('express-validator');
+const sanitizeHtml = require('sanitize-html');  // Added sanitize-html
 require('dotenv').config();
 
 const app = express();
@@ -87,7 +88,7 @@ app.get('/dashboard', (req, res) => {
   });
 });
 
-// Profile update route with validation and sanitization
+// Profile update route with validation, sanitization, and encryption
 app.post('/profile/update',
   [
     body('name')
@@ -103,6 +104,12 @@ app.post('/profile/update',
       .matches(/^[\w\s.,!?'"-]*$/).withMessage('Bio contains invalid characters')
   ],
   (req, res) => {
+    // Sanitize bio to strip all HTML tags
+    req.body.bio = sanitizeHtml(req.body.bio, {
+      allowedTags: [],
+      allowedAttributes: {}
+    });
+
     const errors = validationResult(req);
     const { name, email, bio } = req.body;
 
